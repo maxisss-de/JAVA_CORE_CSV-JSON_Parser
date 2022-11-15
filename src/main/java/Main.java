@@ -1,17 +1,16 @@
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import com.opencsv.CSVReader;
-import com.opencsv.bean.ColumnPositionMappingStrategy;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.exceptions.CsvBeanIntrospectionException;
-
+import com.opencsv.bean.ColumnPositionMappingStrategy;
+import com.google.gson.reflect.TypeToken;
+import com.opencsv.bean.CsvToBeanBuilder;
+import com.google.gson.GsonBuilder;
+import com.opencsv.bean.CsvToBean;
+import java.lang.reflect.Type;
+import com.opencsv.CSVReader;
+import com.google.gson.Gson;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -34,25 +33,25 @@ public class Main {
                     .withMappingStrategy(strategy)
                     .build();
             users = csv.parse();
-        } catch (IOException | CsvBeanIntrospectionException e) {                                                                     // 5. try-catch с ресурсами
+        } catch (IOException | CsvBeanIntrospectionException e) {                                     // 5. try-catch с ресурсами
             e.printStackTrace();
         }
         return users;
     }
 
-    public static String listToJson(List<Employee> list) {             // 11. Метод listToJson() -этот метод преобразуйт в строчку в формате JSON.
-        GsonBuilder builder = new GsonBuilder();                       // 13.1. Создал объект типа GsonBuilder. Создайм "GsonBuilder = new GsonBuilder()"
+    public static String listToJson(List<Employee> list) {              // 11. Метод listToJson() -этот метод преобразуйт в строчку в формате JSON.
+        GsonBuilder builder = new GsonBuilder();                        // 13.1. Создал объект типа GsonBuilder. Создайм "GsonBuilder = new GsonBuilder()"
         Gson gson = builder.create();                                   // 13.2. Создал объект Gson
         Type listType = new TypeToken<List<Employee>>() {
-        }.getType();  // 14. Преобразования списка объектов в JSON, требуется определить тип этого спика, сделал
-        String json = gson.toJson(list, listType);                     // 15. Получить JSON из экземпляра класса Gson можно с помощтю метода toJson(), передав в качестве аргументов список сотрудников и тип списка:
+        }.getType();                                                    // 14. Преобразования списка объектов в JSON, требуется определить тип этого спика, сделал
+        String json = gson.toJson(list, listType);                      // 15. Получить JSON из экземпляра класса Gson можно с помощтю метода toJson(), передав в качестве аргументов список сотрудников и тип списка:
         return json;
     }
 
     public static void writeString(List<Employee> list) throws CsvBeanIntrospectionException {
-        String json = listToJson(list);                 // 12.1. В метод listToJson мы в скобки передали массив (list), который (см. 3.1 №А) \ Метод listToJson() -это преобразуйт в строчку в формате JSON и передаём всё в "String json" - (точнее "json"), теперь у нас преобразование в JSON храниться в "json"
+        String json = listToJson(list);                                 // 12.1. В метод listToJson мы в скобки передали массив (list), который (см. 3.1 №А) \ Метод listToJson() -это преобразуйт в строчку в формате JSON и передаём всё в "String json" - (точнее "json"), теперь у нас преобразование в JSON храниться в "json"
         try (FileWriter file = new FileWriter("data.json")) {
-            file.write(String.valueOf(json));           // 12.2. Тут в скобках указываем, что в "String json"
+            file.write(String.valueOf(json));                           // 12.2. Тут в скобках указываем, что в "String json"
             file.flush();
         } catch (IOException e) {
             e.printStackTrace();
